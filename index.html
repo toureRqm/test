@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Points d'intérêt OpenStreetMap</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="my-div">Chargement des points d'intérêt...</div>
+    <script type="module">
+        import { openstreetmapGetPOIs } from 'https://tbo47.github.io/ez-opendata.js';
+
+        function getPOIs() {
+          navigator.geolocation.getCurrentPosition(async (position) => {
+            const { latitude, longitude } = position.coords;
+
+            // Creation du carré de coordonnée
+            const coordSquare = `${latitude - 0.1},${longitude - 0.1},${latitude + 0.1},${longitude + 0.1}`;
+
+            // Définition des types de points d'intérêt
+            const types = [
+              ["amenity", "bar"],
+              ["amenity", "biergarten"],
+              ["amenity", "cafe"],
+              ["amenity", "restaurant"],
+              ["amenity", "fast_food"],
+              ["amenity", "food_court"],
+              ["amenity", "ice_cream"],
+            ];
+
+            // Récupération des poits d'intérêt
+            const food = await openstreetmapGetPOIs(coordSquare, types);
+
+            // Affichage des points d'intérêt
+            const myDiv = document.getElementById('my-div');
+            myDiv.innerHTML = '';
+            food.forEach(poi => {
+              myDiv.innerHTML += `<a href="${poi.osm_url}" target="_blank">${poi.name}</a>`;
+            });
+          }, (error) => {
+            console.error('Erreur lors de la récupération de la position', error);
+          });
+        }
+
+        getPOIs();
+    </script>
+</body>
+</html>

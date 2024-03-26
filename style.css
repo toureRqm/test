@@ -1,0 +1,11 @@
+a {
+    display: block;
+    margin-bottom: 10px;
+    color: blue;
+    text-decoration: none;
+}
+
+#my-div {
+    padding: 20px;
+    background-color: #f0f0f0;
+}
